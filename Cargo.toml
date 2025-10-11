@@ -9,7 +9,7 @@ repository = "https://github.com/noahcape/larch"
 keywords = ["agglomerative clustering", "clustering", "kmeans", "hierarchical clustering"]
 categories = ["clustering"]
 exclude = [
-    "./examples/*",
+    "examples/*",
 ]
 
 [dependencies]
