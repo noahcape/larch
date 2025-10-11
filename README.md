@@ -1,3 +1,5 @@
+[![crates.io](https://img.shields.io/crates/v/larch.svg)](https://crates.io/crates/larch)
+[![crates.io](https://docs.rs/larch/badge.svg)](https://docs.rs/larch)
 
 # larch
 
