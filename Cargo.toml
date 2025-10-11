@@ -6,7 +6,7 @@ description = "Hierarchical kmeans clustering seeding algorithm"
 readme = "README.md"
 license-file = "LICENSE"
 repository = "https://github.com/noahcape/larch" 
-keywords = ["kmeans", "hierarchical", "tree cutting", "clustering"]
+keywords = ["kmeans", "hierarchical", "clustering"]
 categories = ["clustering"]
 exclude = [
     "examples/*",
