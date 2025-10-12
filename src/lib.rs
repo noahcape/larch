@@ -1,4 +1,4 @@
-//! # Data Cluster Library
+//! # larch
 //!
 //! This crate provides a generic, trait-based framework for clustering and sampling algorithms.
 //! The main goal of this library is to implemenent a hierarchical clustering method to determine
@@ -6,7 +6,6 @@
 //!
 //! It supports:
 //! - Metric-based clustering via the [`Metric`] trait.
-//! - Sampling strategies such as *low-density seeding* through [`Sample`].
 //! - Hierachical seeding of kmeans through tree cutting agglomerative clustering algorithm.
 //! - Centroid-based clustering methods like *k-means* and *hierarchical clustering* through [`ClusterCompare`].
 //!
@@ -38,7 +37,6 @@
 //!     }
 //! }
 //!
-//! impl Sample<Point> for Point {}
 //!
 //! let points = vec![Point(0.0, 0.0), Point(1.0, 1.0), Point(10.0, 10.0)];
 //! // normal k-means

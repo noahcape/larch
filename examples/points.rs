@@ -35,8 +35,6 @@ impl ClusterCompare<Point> for Point {
     }
 }
 
-impl Sample<Point> for Point {}
-
 fn main() {
     use rand::Rng;
 
@@ -66,7 +64,7 @@ fn main() {
         "./examples/RAND_seeded_kmeans_cluster_rand.png",
     );
 
-    let sample = Point::low_density_sample(&data, (data.len() as f64 * 0.1).ceil() as usize);
+    let sample = low_density_sample::<Point>(&data, (data.len() as f64 * 0.1).ceil() as usize);
     let clusters = Point::agglomerative_cluster(&sample);
     let clusters = Point::hierarchical_seeded_kmeans_from_sample(&data, &sample, &clusters);
     let _ = visualize(

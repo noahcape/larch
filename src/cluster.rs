@@ -83,56 +83,49 @@ pub trait Metric<D> {
     fn distance(&self, other: &D) -> f64;
 }
 
-/// Provides sampling strategies for selecting representative points.
+/// Selects `k` elements from the dataset using low-density sampling.
 ///
-/// The default implementation, [`low_density_sample`], performs
-/// *low-density sampling* inspired by **k-means++**, preferring
-/// points that are far from previously selected samples.
-pub trait Sample<D> {
-    /// Selects `k` elements from the dataset using low-density sampling.
-    ///
-    /// # Arguments
-    ///
-    /// * `data` - The dataset from which to sample.
-    /// * `k` - Number of samples to select.
-    ///
-    /// # Returns
-    ///
-    /// A vector containing `k` sampled elements.
-    ///
-    /// # Behavior
-    ///
-    /// - Starts from one random element.
-    /// - Each subsequent element is chosen with probability proportional
-    ///   to the squared distance from existing samples.
-    fn low_density_sample(data: &Vec<D>, k: usize) -> Vec<D>
-    where
-        D: Metric<D> + Debug + Copy,
-    {
-        let mut rng = rand::thread_rng();
-        let mut sample = vec![];
+/// # Arguments
+///
+/// * `data` - The dataset from which to sample.
+/// * `k` - Number of samples to select.
+///
+/// # Returns
+///
+/// A vector containing `k` sampled elements.
+///
+/// # Behavior
+///
+/// - Starts from one random element.
+/// - Each subsequent element is chosen with probability proportional
+///   to the squared distance from existing samples.
+pub fn low_density_sample<D>(data: &Vec<D>, k: usize) -> Vec<D>
+where
+    D: Metric<D> + Debug + Copy,
+{
+    let mut rng = rand::thread_rng();
+    let mut sample = vec![];
 
-        // Start with one random element
-        sample.push(data[rng.gen_range(0..data.len())]);
+    // Start with one random element
+    sample.push(data[rng.gen_range(0..data.len())]);
 
-        // Choose remaining samples based on distance weights
-        for _ in 1..k {
-            let weights = data
-                .iter()
-                .map(|d| {
-                    sample
-                        .iter()
-                        .map(|s| D::distance(d, s).powf(2.))
-                        .fold(f64::NEG_INFINITY, f64::max)
-                })
-                .collect::<Vec<_>>();
+    // Choose remaining samples based on distance weights
+    for _ in 1..k {
+        let weights = data
+            .iter()
+            .map(|d| {
+                sample
+                    .iter()
+                    .map(|s| D::distance(d, s).powf(2.))
+                    .fold(f64::NEG_INFINITY, f64::max)
+            })
+            .collect::<Vec<_>>();
 
-            let dist = WeightedIndex::new(&weights).unwrap();
-            sample.push(data[dist.sample(&mut rng)]);
-        }
-
-        sample
+        let dist = WeightedIndex::new(&weights).unwrap();
+        sample.push(data[dist.sample(&mut rng)]);
     }
+
+    sample
 }
 
 /// Provides clustering operations for centroid-based algorithms.
@@ -251,9 +244,9 @@ pub trait ClusterCompare<D> {
     /// A vector of clusters represented by index lists.
     fn kmeans(data: &Vec<D>, k: usize) -> Vec<Vec<usize>>
     where
-        D: ClusterCompare<D> + Sample<D> + Metric<D> + Copy + Debug,
+        D: ClusterCompare<D> + Metric<D> + Copy + Debug,
     {
-        let centroids = D::low_density_sample(data, k);
+        let centroids = low_density_sample::<D>(data, k);
         D::iterate_kmeans(data, centroids, k)
     }
 

@@ -129,5 +129,3 @@ impl ClusterCompare<Iris> for Iris {
         }
     }
 }
-
-impl Sample<Iris> for Iris {}
